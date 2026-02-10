@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Para o Meu Amor</title>
+    <style>
+        :root {
+            --cor-fundo: #fff5f7;
+            --cor-primaria: #ff4d6d;
+            --cor-secundaria: #ff758f;
+            --cor-texto: #590d22;
+        }
+
+        body, html {
+            height: 100%;
+            margin: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--cor-fundo);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+            text-align: center;
+        }
+
+        /* Fundo com corações flutuantes */
+        .hearts {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+            pointer-events: none;
+        }
+
+        .heart {
+            position: absolute;
+            fill: var(--cor-secundaria);
+            opacity: 0.6;
+            animation: float 6s linear infinite;
+        }
+
+        @keyframes float {
+            0% { transform: translateY(100vh) rotate(0deg); opacity: 1; }
+            100% { transform: translateY(-10vh) rotate(360deg); opacity: 0; }
+        }
+
+        .container {
+            position: relative;
+            z-index: 10;
+            padding: 20px;
+            max-width: 600px;
+        }
+
+        /* Botão Estilizado */
+        #reveal-btn {
+            background: linear-gradient(45deg, var(--cor-primaria), var(--cor-secundaria));
+            color: white;
+            border: none;
+            padding: 25px 50px;
+            font-size: 1.5rem;
+            font-weight: bold;
+            border-radius: 50px;
+            cursor: pointer;
+            box-shadow: 0 10px 20px rgba(255, 77, 109, 0.4);
+            transition: transform 0.3s, box-shadow 0.3s;
+            outline: none;
+        }
+
+        #reveal-btn:hover {
+            transform: scale(1.1);
+            box-shadow: 0 15px 30px rgba(255, 77, 109, 0.6);
+        }
+
+        /* Texto Romântico */
+        #love-message {
+            display: none;
+            background: rgba(255, 255, 255, 0.9);
+            padding: 40px;
+            border-radius: 30px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            border: 2px solid #ffb3c1;
+            animation: fadeIn 2s ease-out forwards;
+        }
+
+        h1 { color: var(--cor-primaria); margin-bottom: 20px; }
+        p { color: var(--cor-texto); line-height: 1.8; font-size: 1.2rem; font-style: italic; }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: scale(0.8); }
+            to { opacity: 1; transform: scale(1); }
+        }
+
+        /* Esconder o player de música */
+        #music-player { display: none; }
+    </style>
+</head>
+<body>
+
+    <div class="hearts" id="heart-container"></div>
+
+    <div class="container">
+        <button id="reveal-btn">Clique para uma surpresa ❤️</button>
+
+        <div id="love-message">
+            <h1>Pra Sempre Com Você</h1>
+            <p>
+                "O que eu sinto por você é algo que não cabe em mim... 
+                É a vontade de te ver todo dia, de cuidar de você e de planejar 
+                nosso futuro ao som dessa música. Você é o meu melhor presente."
+            </p>
+            <p style="font-size: 1.5rem; margin-top: 20px;">🌹 Te amo! 🌹</p>
+        </div>
+    </div>
+
+    <div id="music-player"></div>
+
+    <script>
+        // Carrega a API do YouTube
+        var tag = document.createElement('script');
+        tag.src = "https://www.youtube.com/iframe_api";
+        var firstScriptTag = document.getElementsByTagName('script')[0];
+        firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
+
+        var player;
+        function onYouTubeIframeAPIReady() {
+            player = new YT.Player('music-player', {
+                height: '0',
+                width: '0',
+                videoId: 'y0X3ASEecdw', // ID da música Pra Sempre Com Você
+                events: {
+                    'onReady': onPlayerReady
+                }
+            });
+        }
+
+        function onPlayerReady(event) {
+            // Player pronto, mas só toca ao clicar
+        }
+
+        // Gerador de corações
+        function createHeart() {
+            const heart = document.createElement('div');
+            heart.classList.add('heart');
+            heart.innerHTML = '❤️';
+            heart.style.left = Math.random() * 100 + 'vw';
+            heart.style.animationDuration = (Math.random() * 3 + 3) + 's';
+            heart.style.fontSize = (Math.random() * 20 + 10) + 'px';
+            document.getElementById('heart-container').appendChild(heart);
+            setTimeout(() => { heart.remove(); }, 6000);
+        }
+
+        setInterval(createHeart, 400);
+
+        // Lógica do botão
+        const btn = document.getElementById('reveal-btn');
+        const message = document.getElementById('love-message');
+
+        btn.addEventListener('click', () => {
+            btn.style.display = 'none';
+            message.style.display = 'block';
+            
+            // Toca a música
+            if (player && player.playVideo) {
+                player.playVideo();
+            }
+
+            // Chuva de corações intensa
+            for(let i=0; i<50; i++) {
+                setTimeout(createHeart, i * 30);
+            }
+        });
+    </script>
+</body>
+</html>
